@@ -78,7 +78,7 @@ The API defaults to running on localhost port 8080
 
 ```json
 {
-  "contaminant": terrible-compound-X,
+  "contaminant": "terrible-compound-X",
   "description": "some text about how bad this one is",
   "default_weight": 1.1
 }
@@ -91,15 +91,15 @@ The API defaults to running on localhost port 8080
   "site": "Some new pumping station",
   "contaminants": [
      {
-       "contaminant_id": 4
+       "contaminant_id": 4,
        "concentration": 0.01234
      },
      {
-       "contaminant_id": 3
+       "contaminant_id": 3,
        "concentration": 0.02345
      },
      {
-       "contaminant_id": 8
+       "contaminant_id": 8,
        "concentration": 0.05234
      }
   ]
@@ -115,15 +115,15 @@ The API defaults to running on localhost port 8080
   "description": "Some new pumping station",
   "factor_set": [
      {
-       "contaminant_id": 1
+       "contaminant_id": 1,
        "strength": 1.1
      },
      {
-       "contaminant_id": 2
+       "contaminant_id": 2,
        "strength": 2.7
      },
      {
-       "contaminant_id": 3
+       "contaminant_id": 3,
        "strength": 0.9
      }
   ]

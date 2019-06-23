@@ -61,20 +61,18 @@ The setup script will create the `water_quality` database and a system (admin) u
 Start the application:
 
 ```sh
-python ./app.py
+flask run
 ```
 
 That's it!!! The application exposes several RESTful endpoints which can be called using curl or postman.
 
 ### API 
 
-The API defaults to running on localhost port 8080
+The API defaults to running on localhost port 5000
 
-- GET `/sample/<int:sample_id>` : Gets sample info for sample_id.  Optional boolean parameter `include_factors=[true/false]` to return sample-factor calculated values for all known factor sets.
-- GET `/factor/<int:factor_id>` : Get contaminant strengths for a given set with factor_id.
-- GET `/sample-factor/<int:sample_id>/<int:factor_id>` : Gets sample "score" or weighted concentration for a given sample and factor set.
+- GET `/api/contaminant/<int:contaminant_id>` : Gets info about contaminant with given `contaminant_id`.
 
-- POST `/add-contaminant` : add a new contaminant with json describing the contaminant.  Requires a contaminant name, description and default weight to use for new factor sets.  Returns a contaminant identifier or key.
+- POST `/api/contaminant` : add a new contaminant with json describing the contaminant.  Requires a contaminant name, description and default weight to use for new factor sets.  Returns `contaminant_id` key for the created contaminant record.
 
 ```json
 {
@@ -84,7 +82,9 @@ The API defaults to running on localhost port 8080
 }
 ```
 
-- POST `/sample` : add a new sample with json describing the sample.  Requires a site name and list of contaminant keyed by their contaminant_id and their associated concentration.  Returns the created `site_id` on success or indicates if that site name already exists.  Contaminants not listed will be assumed to have zero concentration.
+- GET `/api/sample/<int:sample_id>` : Gets water sample info for sample with given `sample_id`.  Optional boolean parameter `include_factors=[true/false]` to return sample-factor calculated values for all known factor sets.
+
+- POST `/api/sample` : add a new sample with json describing the sample.  Requires a site name and list of contaminant keyed by their contaminant_id and their associated concentration.  Returns the `sample_id` of the created record on success or indicates if sample record with site name already exists.  Contaminants not listed will be assumed to have zero concentration.
 
 ```json
 {
@@ -106,14 +106,18 @@ The API defaults to running on localhost port 8080
 }
 ```
 
-- DELETE `/sample/<int:sample_id>` : deletes a sample with given sample_id
+- DELETE `/api/sample/<int:sample_id>` : deletes a sample with given sample_id
 
-- POST `/factor-set` : add a new factor set to use or include in sample evaluation.  Requires a factor set description and list of contaminants keyed by their contaminant_id and associated relative-strength in the factor set.  Returns the created factor_id
+- GET `/api/factor/<int:factor_id>` : Get contaminant strengths for a given factor weight set with given factor_id.
+
+- GET `/api/sample-factor/<int:sample_id>/<int:factor_id>` : Gets sample "score" or weighted concentration for a given sample and factor weight set.
+
+- POST `/api/factor` : add a new factor weight set to use or include in sample evaluation.  Requires a factor set description and list of contaminants keyed by their `contaminant_id` and associated relative-strength in the factor set.  Returns the created `factor_id` of the factor weight set record.
 
 ```json
 {
   "description": "Some new pumping station",
-  "factor_set": [
+  "weight_set": [
      {
        "contaminant_id": 1,
        "strength": 1.1
@@ -130,7 +134,7 @@ The API defaults to running on localhost port 8080
 }
 ```
 
-- DELETE `factor-set/<int:factor_id>` : deletes a factor set with given factor_id
+- DELETE `/api/factor/<int:factor_id>` : deletes a factor set with given `factor_id`.
 
 
 ### Models & Views

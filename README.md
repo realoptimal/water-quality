@@ -70,9 +70,9 @@ That's it!!! The application exposes several RESTful endpoints which can be call
 
 The API defaults to running on localhost port 5000
 
-- GET `/api/contaminant/<int:contaminant_id>` : Gets info about contaminant with given `contaminant_id`.
+- `GET /api/contaminant/<int:contaminant_id>` : Gets info about contaminant with given _contaminant_id_.
 
-- POST `/api/contaminant` : add a new contaminant with json describing the contaminant.  Requires a contaminant name, description and default weight to use for new factor sets.  Returns `contaminant_id` key for the created contaminant record.
+- `POST /api/contaminant` : add a new contaminant with json describing the contaminant.  Requires a contaminant name, description and default weight to use for new factor sets.  Returns _contaminant_id_ key for the created contaminant record.
 
 ```json
 {
@@ -82,9 +82,9 @@ The API defaults to running on localhost port 5000
 }
 ```
 
-- GET `/api/sample/<int:sample_id>` : Gets water sample info for sample with given `sample_id`.  Optional boolean parameter `include_factors=[true/false]` to return sample-factor calculated values for all known factor sets.
+- `GET /api/sample/<int:sample_id>` : Gets water sample info for sample with given _sample_id_.  Optional boolean parameter `include_factors=[true/false]` to return sample-factor calculated values for all known factor sets.
 
-- POST `/api/sample` : add a new sample with json describing the sample.  Requires a site name and list of contaminant keyed by their contaminant_id and their associated concentration.  Returns the `sample_id` of the created record on success or indicates if sample record with site name already exists.  Contaminants not listed will be assumed to have zero concentration.
+- `POST /api/sample` : add a new sample with json describing the sample.  Requires a site name and list of contaminant keyed by their _contaminant_id_ and their associated concentration.  Returns the _sample_id_ of the created record on success or indicates if sample record with site name already exists.  Contaminants not listed will be assumed to have zero concentration.
 
 ```json
 {
@@ -106,13 +106,13 @@ The API defaults to running on localhost port 5000
 }
 ```
 
-- DELETE `/api/sample/<int:sample_id>` : deletes a sample with given sample_id
+- `DELETE /api/sample/<int:sample_id>` : deletes a sample with given _sample_id_.
 
-- GET `/api/factor/<int:factor_id>` : Get contaminant strengths for a given factor weight set with given factor_id.
+- `GET /api/factor/<int:factor_id>` : Get contaminant strengths for a given factor weight set with given _factor_id_.
 
-- GET `/api/sample-factor/<int:sample_id>/<int:factor_id>` : Gets sample "score" or weighted concentration for a given sample and factor weight set.
+- `GET /api/sample-factor/<int:sample_id>/<int:factor_id>` : Gets sample "score" or weighted concentration for a given sample and factor weight set.
 
-- POST `/api/factor` : add a new factor weight set to use or include in sample evaluation.  Requires a factor set description and list of contaminants keyed by their `contaminant_id` and associated relative-strength in the factor set.  Returns the created `factor_id` of the factor weight set record.
+- `POST /api/factor` : add a new factor weight set to use or include in sample evaluation.  Requires a factor set description and list of contaminants keyed by their _contaminant_id_ and associated relative-strength in the factor set.  Returns the created _factor_id_ of the factor weight set record.
 
 ```json
 {
@@ -134,7 +134,7 @@ The API defaults to running on localhost port 5000
 }
 ```
 
-- DELETE `/api/factor/<int:factor_id>` : deletes a factor set with given `factor_id`.
+- `DELETE /api/factor/<int:factor_id>` : deletes a factor set with given _factor_id_.
 
 
 ### Models & Views

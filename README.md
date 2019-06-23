@@ -76,9 +76,9 @@ The API defaults to running on localhost port 5000
 
 ```json
 {
-  "contaminant": "terrible-compound-X",
+  "name": "terrible-compound-X",
   "description": "some text about how bad this one is",
-  "default_weight": 1.1
+  "default_strength": 1.1
 }
 ```
 

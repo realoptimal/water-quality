@@ -89,7 +89,7 @@ The API defaults to running on localhost port 5000
 ```json
 {
   "site": "Some new pumping station",
-  "contaminants": [
+  "contaminant_concentrations": [
      {
        "contaminant_id": 4,
        "concentration": 0.01234
@@ -116,7 +116,7 @@ The API defaults to running on localhost port 5000
 
 ```json
 {
-  "description": "Some new pumping station",
+  "description": "New filtration factor",
   "weight_set": [
      {
        "contaminant_id": 1,

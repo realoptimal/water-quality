@@ -23,9 +23,9 @@ class Sample(db.Model):
 
 
 class SampleContaminantConcentration(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    sample_id = db.Column(db.Integer, db.ForeignKey('sample.id'), nullable=False)
-    contaminant_id = db.Column(db.Integer, db.ForeignKey('contaminant.id'), nullable=False)
+    # id = db.Column(db.Integer, primary_key=True)
+    sample_id = db.Column(db.Integer, db.ForeignKey('sample.id'), nullable=False, primary_key=True)
+    contaminant_id = db.Column(db.Integer, db.ForeignKey('contaminant.id'), nullable=False, primary_key=True)
     contaminant = db.relationship('Contaminant', 
         backref=db.backref('sample_contaminant_concentration'), 
         lazy=True, uselist=False

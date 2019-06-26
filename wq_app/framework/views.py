@@ -33,7 +33,10 @@ class SampleApi(Resource):
         return jsonify(res)
 
     def post(self):
-        ''' Create contaminant and return it linked to contamaninant_id '''
+        ''' Create sample and return it linked to sample_id 
+            Will also create any sample linked contaminant concentration
+            records.
+        '''
         args = parser.parse_args()
         site = args['site']
         contaminant_concentrations = args['contaminant_concentrations']
@@ -79,13 +82,33 @@ class FactorApi(Resource):
             _cs_list_of_dicts = [c.to_dict() for c in factor.contaminant_strengths]
             res[factor.id] = {
                 'description': factor.description,
-                'contaminant_strength': _cc_list_of_dicts
+                'contaminant_strengths': _cc_list_of_dicts
             }
         return jsonify(res)
 
     def post(self):
-        ''' Create a new water sample '''
-        return 'This is a POST response'
+        ''' Create factor and return it linked to factor_id 
+            Will also create any factor linked contaminant strength
+            records.
+        '''
+        args = parser.parse_args()
+        description = args['description']
+        contaminant_strengths = args['contaminant_strengths']
+        factor = Factor(description=description)
+        db.session.add(factor)
+        db.session.commit()
+        for cs in contaminant_strengths:
+            factor_cs = FactorContaminantStrength(**cs)
+            factor_cs.factor_id = factor.id
+            db.session.add(factor_cs)
+        db.session.commit()
+        res = {}
+        _cs_list_of_dicts = [{'contaminant_id': c.contaminant_id, 'strength': c.strength} for c in factor.contaminant_strengths]
+        res[factor.id] = {
+            'description': factor.description,
+            'contaminant_strengths': _cc_list_of_dicts
+        }
+        return jsonify(res)
 
     def delete(self, factor_id):
         ''' Delete sample with given sample_id '''

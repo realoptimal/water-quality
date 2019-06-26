@@ -112,12 +112,12 @@ The API defaults to running on localhost port 5000
 
 - `GET /api/sample-factor/<int:sample_id>/<int:factor_id>` : Gets sample "score" or weighted concentration for a given sample and factor weight set.
 
-- `POST /api/factor` : add a new factor weight set to use or include in sample evaluation.  Requires a factor set description and list of contaminants keyed by their _contaminant_id_ and associated relative-strength in the factor set.  Returns the created _factor_id_ of the factor weight set record.
+- `POST /api/factor` : add a new factor (weight set) to use or include in sample evaluation.  Requires a factor description and list of contaminants keyed by their _contaminant_id_ and associated relative-strength in the factor.  Returns the created _factor_id_ of the factor record.
 
 ```json
 {
   "description": "New filtration factor",
-  "weight_set": [
+  "contaminant_strengths": [
      {
        "contaminant_id": 1,
        "strength": 1.1

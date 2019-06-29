@@ -20,6 +20,19 @@ class Sample(db.Model):
     )
 
     @hybrid_method
+    def to_hash(self, include_factors=False):
+        sample_hash = {
+            'id': self.id, 
+            'site': self.site,
+            'contaminant_concentrations': [{'contaminant_id': c.contaminant_id, 'contaminant_name': c.contaminant.name, 'concentration': c.concentration} for c in self.contaminant_concentrations]
+        }
+        if include_factors:
+            # insert factors into dict for factor each factor
+            all_factors = Factor.query.all()
+            sample_hash['factors'] = [{'factor_id': f.id, 'description': f.description, 'value': self.factor(f.id)} for f in all_factors] 
+        return sample_hash         
+
+    @hybrid_method
     def factor(self, factor_id):
         factor = Factor.query.get(factor_id)
         retval = 0.0

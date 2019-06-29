@@ -147,7 +147,7 @@ sample2 = Sample(2)
 sample2.site # "North Hollywood Pump Station (well blend)"
 sample2.factor(6) # 0.0213
 sample2.to_hash() #
-sample2.to_hash(include_factors) #
+sample2.to_hash(include_factors=True) #
 ```
 
 ```

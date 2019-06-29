@@ -10,7 +10,7 @@ parser.add_argument('description', type=str)
 parser.add_argument('default_strength', type=float)
 parser.add_argument('site', type=str)
 parser.add_argument('contaminant_concentrations', type=list, location='json')
-parser.add_argument('weight_set', type=list, location='json')
+parser.add_argument('contaminant_strengths', type=list, location='json')
 
 class SampleApi(Resource):
     def get(self, sample_id=None):
@@ -79,10 +79,10 @@ class FactorApi(Resource):
             abort(404, message='No factor(s) found given request.')
         res = {}
         for factor in factors:
-            _cs_list_of_dicts = [c.to_dict() for c in factor.contaminant_strengths]
+            _cs_list_of_dicts = [{'contaminant_id': c.contaminant_id, 'strength': c.strength} for c in factor.contaminant_strengths]
             res[factor.id] = {
                 'description': factor.description,
-                'contaminant_strengths': _cc_list_of_dicts
+                'contaminant_strengths': _cs_list_of_dicts
             }
         return jsonify(res)
 
@@ -106,7 +106,7 @@ class FactorApi(Resource):
         _cs_list_of_dicts = [{'contaminant_id': c.contaminant_id, 'strength': c.strength} for c in factor.contaminant_strengths]
         res[factor.id] = {
             'description': factor.description,
-            'contaminant_strengths': _cc_list_of_dicts
+            'contaminant_strengths': _cs_list_of_dicts
         }
         return jsonify(res)
 

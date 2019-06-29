@@ -1,4 +1,5 @@
 from wq_app import db
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
 class Contaminant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -7,7 +8,7 @@ class Contaminant(db.Model):
     default_strength = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
-        return '<Contaminant %r' % self.id
+        return '<Contaminant %r>' % self.id
 
 
 class Sample(db.Model):
@@ -17,6 +18,15 @@ class Sample(db.Model):
         backref=db.backref('sample'), 
         lazy=True
     )
+
+    @hybrid_method
+    def factor(self, factor_id):
+        factor = Factor.query.get(factor_id)
+        retval = 0.0
+        for fcs in factor.contaminant_strengths:
+            scc = SampleContaminantConcentration.query.filter_by(sample_id=self.id, contaminant_id=fcs.contaminant_id).first()
+            retval += fcs.strength*scc.concentration
+        return retval
 
     def __repr__(self):
         return '<Sample %r>' % self.id
@@ -32,6 +42,9 @@ class SampleContaminantConcentration(db.Model):
     )
     concentration = db.Column(db.Float, nullable=False)
 
+    def __repr__(self):
+        return '<SampleContaminantConcentration %r:%r>' % (self.sample_id, self.contaminant_id)
+
 
 class Factor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -45,9 +58,9 @@ class Factor(db.Model):
 
 
 class FactorContaminantStrength(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    factor_id = db.Column(db.Integer, db.ForeignKey('factor.id'), nullable=False)
-    contaminant_id = db.Column(db.Integer, db.ForeignKey('contaminant.id'), nullable=False)
+    # id = db.Column(db.Integer, primary_key=True)
+    factor_id = db.Column(db.Integer, db.ForeignKey('factor.id'), nullable=False, primary_key=True)
+    contaminant_id = db.Column(db.Integer, db.ForeignKey('contaminant.id'), nullable=False, primary_key=True)
     contaminant = db.relationship('Contaminant', 
         backref=db.backref('factor_contaminant_strength'), 
         lazy=True, uselist=False

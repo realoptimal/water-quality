@@ -112,7 +112,7 @@ The API defaults to running on localhost port 5000
 
 - `GET /api/sample-factor/<int:sample_id>/<int:factor_id>` : Gets sample "score" or weighted concentration for a given sample and factor weight set.
 
-- `POST /api/factor` : add a new factor (weight set) to use or include in sample evaluation.  Requires a factor description and list of contaminants keyed by their _contaminant_id_ and associated relative-strength in the factor.  Returns the created _factor_id_ of the factor record.
+- `POST /api/factor` : add a new factor (weight set) to use or include in sample evaluation.  Requires a factor description and list of contaminants keyed by their _contaminant_id_ and associated relative-strength (weight) in the factor.  Returns the created _factor_id_ of the factor record.
 
 ```json
 {
@@ -139,7 +139,18 @@ The API defaults to running on localhost port 5000
 
 ### Models & Views
 
+The model and views code make use of two python libraries to make working with sqlalchemy a bit more convenient, namely flask-sqlalchemy and flask-restful.
+
 ```python
+# suppose the sample we want has sample_id = 2
+sample2 = Sample(2)
+sample2.site # "North Hollywood Pump Station (well blend)"
+sample2.factor(6) # 0.0213
+sample2.to_hash() #
+sample2.to_hash(include_factors) #
+```
+
+```
 class WaterSample
 
   # This class intends to ease the managing of the collected sample data, 

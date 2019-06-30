@@ -82,6 +82,8 @@ The API defaults to running on localhost port 5000
 }
 ```
 
+- `GET /api/sample` : Gets water sample info for all samples in the database.
+
 - `GET /api/sample/<int:sample_id>` : Gets water sample info for sample with given _sample_id_.  Optional boolean parameter `include_factors=[true/false]` to return sample-factor calculated values for all known factor sets.
 
 - `POST /api/sample` : add a new sample with json describing the sample.  Requires a site name and list of contaminant keyed by their _contaminant_id_ and their associated concentration.  Returns the _sample_id_ of the created record on success or indicates if sample record with site name already exists.  Contaminants not listed will be assumed to have zero concentration.
@@ -107,6 +109,8 @@ The API defaults to running on localhost port 5000
 ```
 
 - `DELETE /api/sample/<int:sample_id>` : deletes a sample with given _sample_id_.
+
+- `GET /api/factor` : Get contaminant strengths for all factor weight sets in the database.
 
 - `GET /api/factor/<int:factor_id>` : Get contaminant strengths for a given factor weight set with given _factor_id_.
 

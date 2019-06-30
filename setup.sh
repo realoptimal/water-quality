@@ -41,5 +41,6 @@ fi
 source ./wq_env/bin/activate
 pip install -r requirements.txt
 
+python init_db.py
 echo "Done."
 

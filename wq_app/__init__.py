@@ -5,7 +5,7 @@ from flask_migrate import Migrate, MigrateCommand
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://wqadmin:gobbldeygook@localhost/water_quality_ng'
-app.config['JSON_SORT_KEYS'] = False
+app.config['JSON_SORT_KEYS'] = False # Don't sort keys alphabetically, when jsonizing output
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 

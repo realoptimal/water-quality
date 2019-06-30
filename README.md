@@ -139,63 +139,75 @@ The API defaults to running on localhost port 5000
 
 ### Models & Views
 
-The model and views code make use of two python libraries to make working with sqlalchemy a bit more convenient, namely flask-sqlalchemy and flask-restful.
+The model and views code make use of two python libraries to make working with sqlalchemy a bit more convenient, namely Flask-SQLAlchemy and Flask-RESTful.
 
 ```python
 # suppose the sample we want has sample_id = 2
-sample2 = Sample(2)
-sample2.site # "North Hollywood Pump Station (well blend)"
-sample2.factor(6) # 0.0213
-sample2.to_hash() #
-sample2.to_hash(include_factors=True) #
+>>> import json
+>>> from wq_app import db
+>>> from wq_app.framework.models import *
+>>> sample2 = Sample.query.get(2)
+>>> print(json.dumps(sample2.to_hash(), sort_keys=False, indent=4))
+{
+    "id": 2,
+    "site": "North Hollywood Pump Station (well blend)",
+    "contaminant_concentrations": [
+        {
+            "contaminant_id": 1,
+            "contaminant_name": "chloroform",
+            "concentration": 0.00291
+        },
+        {
+            "contaminant_id": 2,
+            "contaminant_name": "bromoform",
+            "concentration": 0.00487
+        },
+        {
+            "contaminant_id": 3,
+            "contaminant_name": "bromodichloromethane",
+            "concentration": 0.00547
+        },
+        {
+            "contaminant_id": 4,
+            "contaminant_name": "dibromichloromethane",
+            "concentration": 0.0109
+        }
+    ]
+}
+>>> print(json.dumps(sample2.to_hash(include_factors=True), sort_keys=False, indent=4))
+{
+    "id": 2,
+    "site": "North Hollywood Pump Station (well blend)",
+    "contaminant_concentrations": [
+        {
+            "contaminant_id": 1,
+            "contaminant_name": "chloroform",
+            "concentration": 0.00291
+        },
+        {
+            "contaminant_id": 2,
+            "contaminant_name": "bromoform",
+            "concentration": 0.00487
+        },
+        {
+            "contaminant_id": 3,
+            "contaminant_name": "bromodichloromethane",
+            "concentration": 0.00547
+        },
+        {
+            "contaminant_id": 4,
+            "contaminant_name": "dibromichloromethane",
+            "concentration": 0.0109
+        }
+    ],
+    "factors": [
+        {
+            "factor_id": 1,
+            "description": "New filtration factor 1",
+            "value": 0.024007
+        }
+    ]
+}
 ```
 
-```
-class WaterSample
-
-  # This class intends to ease the managing of the collected sample data, 
-  # and assist in computing factors of the data.
-  #
-  # The schema it must interact with and some sample data should be delivered 
-  # with your assignment as a MySQL dump
-
-  def self.find(sample_id)
-    # spec
-    # sample2 = WaterSample.find(2)
-    # sample2.site.should == "North Hollywood Pump Station (well blend)")
-    # sample2.chloroform.should == 0.00291
-    # sample2.bromoform.should == 0.00487
-    # sample2.bromodichloromethane.should == 0.00547
-    # sample2.dibromichloromethane.should == 0.0109
-    
-
-  end
-
- 
-  #
-  # 
-  #
-  # Return the value of the computed factor with id of factor_weights_id
-  def factor(factor_weights_id)
-    # spec:
-    #  sample2 = WaterSample.find(2)
-    #  sample2.factor(6) #computes the 6th factor of sample #2
-    #    => .0213 
-    # Note that the factor for this example is from data not in the sample data 
-    # above, that's because I want you to be sure you understand how to compute
-    # this value conceptually.
-
-  end
-
-  # convert the object to a hash
-  # if include_factors is true, inlcude all computed factors in the hash
-  def to_hash(include_factors = false)
-    # spec:
-    #  sample2.to_hash
-    #   => {:id =>2, :site => "North Hollywood Pump Station (well blend)", :chloroform => .00291, :bromoform => .00487, :bromodichloromethane => .00547 , :dibromichlormethane => .0109}
-    # sample2.to_hash(true) 
-    # #let's say only 3 factors exist in our factors table, with ids of 5, 6, and 9 
-    #   => {:id =>2, :site => "North Hollywood Pump Station (well blend)", :chloroform => .00291, :bromoform => .00487, :bro   modichloromethane => .00547 , :dibromichlormethane => .0109, :factor_5 => .0213, :factor_6 => .0432, :factor_9 => 0.0321}
-
-```
     

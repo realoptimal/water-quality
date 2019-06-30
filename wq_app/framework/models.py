@@ -82,3 +82,5 @@ class FactorContaminantStrength(db.Model):
 
     def __repr__(self):
         return '<FactorContaminantStrength %r:%r>' % (self.factor_id, self.contaminant_id)
+
+        

@@ -13,8 +13,9 @@ echo "Setting up database and system user..."
 # If /root/.my.cnf exists then it won't ask for root password
 if [ -f "${MY_CNF_LOCATION}" ]; then
 	echo "Located my.cnf file"
-    mysql -u "${MY_ADMIN_USER}" -e "CREATE DATABASE ${DB_NAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-    mysql -u "${MY_ADMIN_USER}" -e "CREATE USER ${SYSTEM_USER} IDENTIFIED BY '${DB_PASSWD}';"
+    mysql -u "${MY_ADMIN_USER}" -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+    mysql -u "${MY_ADMIN_USER}" -e "DROP USER IF EXISTS '${SYSTEM_USER}'@'localhost';"
+    mysql -u "${MY_ADMIN_USER}" -e "CREATE USER '${SYSTEM_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWD}';"
     mysql -u "${MY_ADMIN_USER}" -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${SYSTEM_USER}'@'localhost';"
     mysql -u "${MY_ADMIN_USER}" -e "FLUSH PRIVILEGES;"
 
@@ -22,14 +23,21 @@ if [ -f "${MY_CNF_LOCATION}" ]; then
 else
     echo "Please enter root user MySQL password!"
     read -sp rootpasswd
-    mysql -uroot -p${rootpasswd} -e "CREATE DATABASE ${DB_NAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-    mysql -uroot -p${rootpasswd} -e "CREATE USER ${SYSTEM_USER}@localhost IDENTIFIED BY '${DB_PASSWD}';"
+    mysql -uroot -p${rootpasswd} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+    mysql -uroot -p${rootpasswd} -e "DROP USER IF EXISTS '${SYSTEM_USER}'@'localhost'"
+    mysql -uroot -p${rootpasswd} -e "CREATE USER '${SYSTEM_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWD}';"
     mysql -uroot -p${rootpasswd} -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${SYSTEM_USER}'@'localhost';"
     mysql -uroot -p${rootpasswd} -e "FLUSH PRIVILEGES;"
 fi
 
 echo "Setting up python virtual environment and installing requirements..."
-virtualenv -p python3.7 wq_env
+
+if [ -d "${PWD}/wq_env" ]; then
+	echo "Virtual environment already exists!"
+else
+	virtualenv -p python3.7 wq_env
+fi
+
 source ./wq_env/bin/activate
 pip install -r requirements.txt
 

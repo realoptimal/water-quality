@@ -42,10 +42,9 @@ class SampleApi(Resource):
         contaminant_concentrations = args['contaminant_concentrations']
         sample = Sample(site=site)
         db.session.add(sample)
-        db.session.commit()
         for cc in contaminant_concentrations:
             sample_cc = SampleContaminantConcentration(**cc)
-            sample_cc.sample_id = sample.id
+            sample.contaminant_concentrations.append(sample_cc)
             db.session.add(sample_cc)
         db.session.commit()
         res = {}
@@ -96,10 +95,9 @@ class FactorApi(Resource):
         contaminant_strengths = args['contaminant_strengths']
         factor = Factor(description=description)
         db.session.add(factor)
-        db.session.commit()
         for cs in contaminant_strengths:
             factor_cs = FactorContaminantStrength(**cs)
-            factor_cs.factor_id = factor.id
+            factor.contaminant_strengths.append(factor_cs)
             db.session.add(factor_cs)
         db.session.commit()
         res = {}

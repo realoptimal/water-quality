@@ -41,6 +41,12 @@ fi
 source ./wq_env/bin/activate
 pip install -r requirements.txt
 
+if [ -d "${PWD}/migrations" ]; then
+	flask db init
+fi
+flask db migrate
+flask db upgrade
+
 python init_db.py
 echo "Done."
 
